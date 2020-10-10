@@ -1,0 +1,45 @@
+---
+title: "Exercise 2 Charts"
+author: "Mary Geschwindt"
+date: "9/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+library(scales)
+```
+
+```{r creating data, message=FALSE}
+dt_commuters <- tribble(
+  ~x, ~y, ~z,
+  1, "Middlesex County", 47100,
+  2, "Norfolk County", 28400,
+  3, "Plymouth County", 11300,
+  4, "Suffolk County (Downtown Included)", 45100,
+  5, "Essex County", 15100,
+  6, "Other (NH Included)", 24100)
+```
+
+```{r create stack barchart, message=FALSE}
+dt_commuters <- dt_commuters %>%
+  mutate(x = "1")
+
+ggplot(dt_commuters,
+       aes(x = x,
+           y = z,
+           fill = y)) +
+  geom_col() +
+  geom_bar(stat = "identity", position = "fill", width = 0.25) +
+  scale_x_discrete(name = "Counties") +
+  scale_y_continuous(name = "Number of Workers") +
+  labs(fill = "Counties") +
+  theme_bw()
+```
+
