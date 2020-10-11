@@ -37,9 +37,27 @@ ggplot(dt_commuters,
            fill = y)) +
   geom_col() +
   geom_bar(stat = "identity", position = "fill", width = 0.25) +
-  scale_x_discrete(name = "Counties") +
+  scale_x_discrete(name = "Bar") +
   scale_y_continuous(name = "Number of Workers") +
   labs(fill = "Counties") +
   theme_bw()
+```
+
+```{r create plot vector, message=FALSE}
+commuters <- ggplot(dt_commuters,
+       aes(x = x,
+           y = z,
+           fill = y)) +
+  geom_col() +
+  geom_bar(stat = "identity", position = "fill", width = 0.25) +
+  scale_x_discrete(name = "Bar") +
+  scale_y_continuous(name = "Number of Workers") +
+  labs(fill = "Counties") +
+  theme_bw()
+```
+
+
+```{r print to pdf, message=FALSE, results='hide'}
+ggsave("commuters.pdf")
 ```
 
