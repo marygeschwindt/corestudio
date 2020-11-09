@@ -1,0 +1,71 @@
+---
+title: "Exercise3_SB_Land_Use"
+author: "Mary Geschwindt"
+date: "10/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+```{r load libraries, message=FALSE}
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(htmltools)
+library(htmlwidgets)
+```
+
+
+## Property Ownership
+
+### Loading Data
+
+- City Owned Properties from Analyze Boston
+- Inventory of City Managed Properties, including maintenance of buildings and vacant land from Analyze Boston
+
+```{r load city prop data, message=FALSE}
+leaflet_plane <- "+proj=longlat +datum=WGS84"
+
+city_prop <- st_read("https://data.boston.gov/dataset/91752004-84e0-4ea1-bc6a-8e846432f083/resource/39678533-f52a-4f62-860c-b5a484bb278f/download/city-of-boston-owned-property.kml") %>%
+  st_transform(crs = leaflet_plane)
+
+city_managed <- st_read("https://bostonopendata-boston.opendata.arcgis.com/datasets/656184711a95466fba3218d64b894627_8.geojson?outSR=%7B%22latestWkid%22%3A2249%2C%22wkid%22%3A102686%7D") %>%
+  st_transform(crs = leaflet_plane)
+```
+
+### Creating Map
+
+```{r create city prop map, message=FALSE}
+city_prop_map <- leaflet(city_prop) %>%
+  addProviderTiles("Stamen.TonerLite") %>%
+  addPolygons(fillColor = "orange", stroke = FALSE) %>%
+  addPolygons(data = city_managed,
+              fillColor = "cyan", stroke = FALSE) %>%
+  addControl("City Owned Properties in Boston", position = "topright") %>%
+  addControl('<a href="https://data.boston.gov/dataset/91752004-84e0-4ea1-bc6a-8e846432f083/resource/39678533-f52a-4f62-860c-b5a484bb278f/download/city-of-boston-owned-property.kml"> City Property Data source</a>',
+             position = "bottomleft")
+
+city_prop_map
+```
+
+```{r save map, message=FALSE}
+saveWidget(city_prop_map, file = "city_prop_map.html")
+```
+
+## Land Use Map
+
+### Load Data from Analyze Boston
+
+Load parcels shapefile and ownership CSV file.
+
+```{r load land use data}
+parcels <- st_read("https://bostonopendata-boston.opendata.arcgis.com/datasets/656184711a95466fba3218d64b894627_8.geojson?outSR=%7B%22latestWkid%22%3A2249%2C%22wkid%22%3A102686%7D") %>%
+  st_transform(crs = leaflet_plane)
+
+land_use <- st_read("")
+```
+
